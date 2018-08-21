@@ -1,6 +1,12 @@
+# encoding: utf-8
+# encoding: iso-8859-1
+# encoding: win-1252
+
 import tweepy
 import time
 import botometer
+import data
+import unicodedata
 
 consumer_key = 'dB3iaqcrW7WtmZnexrcSfgTgQ'
 consumer_secret =  'xcrI84UBGG5zx6OgMnStva6pC6jUyEgdvyWKPNZN6B1sKTLVDE'
@@ -12,18 +18,10 @@ mashape_key = "RWoa8U8jiImshcKeqzezdmcSr6M7p1U1plajsnTa1CF4tlKGTh"
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 
-api = tweepy.API(auth)
+api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
-ids = []
-
-for page in tweepy.Cursor(api.followers_ids, screen_name="ggapp1").pages():
-    ids.extend(page)
- #   time.sleep(60)
+#    time.sleep(60)
     
-print ids
-print len(ids)
-
-
 twitter_app_auth = {
     'consumer_key': consumer_key,
     'consumer_secret': consumer_secret,
@@ -35,14 +33,28 @@ bom = botometer.Botometer(wait_on_ratelimit=True,
                           mashape_key=mashape_key,
                           **twitter_app_auth)
 
-# Check a single account by id
-for user_id in ids:
-	try:
-		result = bom.check_account(user_id)
-	except botometer.NoTimelineError:
-		print "user {} has no tweets".format(user_id)
-	except tweepy.TweepError:
-	    print("failed for user {}, probably has protected account").format(user_id)
 
-	print "\n*****\n"+str(user_id)+"\n            "
-	print result
+for tweet in tweepy.Cursor(api.search,q="#Bolsonaro",count=1,lang="pt", tweet_mode='extended').items():
+    #print (tweet.created_at, tweet.text, tweet.user.screen_name)
+	print "\n****\n"
+	if 'retweeted_status' in dir(tweet):
+		text = tweet.retweeted_status.full_text
+		print "eh retweet do seguinte usuario: "+str(tweet.retweeted_status.user.screen_name)
+   	else:
+   		text = tweet.full_text
+
+	nfkd_form = unicodedata.normalize('NFKD', text)
+   	only_ascii = nfkd_form.encode('ASCII', 'ignore')
+   	print "usuario "+str(tweet.user.screen_name)
+   	print only_ascii
+
+
+"""
+# Check a single account followers by id
+
+followers = data.get_bot_followers("1564722306", api, bom)
+
+for user, score in followers.iteritems():
+	print "\nuser "+str(user)+" is probably a bot, score: "+str(score)
+"""
+
