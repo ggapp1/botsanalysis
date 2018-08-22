@@ -34,6 +34,24 @@ bom = botometer.Botometer(wait_on_ratelimit=True,
                           **twitter_app_auth)
 
 
+
+a = data.get_bot_hashtag("#Bolsonaro", 1, api, bom)
+
+for user, score in a.iteritems():
+	print "\nuser "+str(user)+" is probably a bot, score: "+str(score)
+
+
+
+"""
+# Check a single account followers by id
+
+followers = data.get_bot_followers("1564722306", api, bom)
+
+for user, score in followers.iteritems():
+	print "\nuser "+str(user)+" is probably a bot, score: "+str(score)
+
+
+
 for tweet in tweepy.Cursor(api.search,q="#Bolsonaro",count=1,lang="pt", tweet_mode='extended').items():
     #print (tweet.created_at, tweet.text, tweet.user.screen_name)
 	print "\n****\n"
@@ -49,12 +67,5 @@ for tweet in tweepy.Cursor(api.search,q="#Bolsonaro",count=1,lang="pt", tweet_mo
    	print only_ascii
 
 
-"""
-# Check a single account followers by id
-
-followers = data.get_bot_followers("1564722306", api, bom)
-
-for user, score in followers.iteritems():
-	print "\nuser "+str(user)+" is probably a bot, score: "+str(score)
 """
 
