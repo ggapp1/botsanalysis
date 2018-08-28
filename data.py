@@ -74,12 +74,21 @@ def get_bot_hashtag(hashtag, count, api, bom):
 	   		bots[reuser_id] = reuser_score
 	return bots
 
+def get_tweets(user_id, api):
 
-
+	tweet_list = []
+	print len(tweet_list)
+	print "teste"
+	for pages in tweepy.Cursor(api.user_timeline, id=user_id, count=1,include_rts = True,tweet_mode='extended'
+		).pages():        
+		for tweet in pages:
+			tweet_list.append(tweet)
+			print len(tweet_list)
+	return tweet_list
 """
 def get_bot_following(user_id, api, bom):
 
-def get_tweets(user_id, api):
+
 
 def get_geo(user_id, api):
 """

@@ -35,6 +35,22 @@ bom = botometer.Botometer(wait_on_ratelimit=True,
 
 
 
+tweet_list = data.get_tweets("1029108038127501312", api)
+print len(tweet_list)
+for tweet in tweet_list:
+	if 'retweeted_status' in dir(tweet):
+		text = tweet.retweeted_status.full_text
+		print "eh retweet do seguinte usuario: "+str(tweet.retweeted_status.user.screen_name)
+   	else:
+   		text = tweet.full_text
+
+	nfkd_form = unicodedata.normalize('NFKD', text)
+   	only_ascii = nfkd_form.encode('ASCII', 'ignore')
+   	print only_ascii
+
+print len(tweet_list)
+
+"""
 a = data.get_bot_hashtag("#Bolsonaro", 1, api, bom)
 
 for user, score in a.iteritems():
@@ -42,7 +58,7 @@ for user, score in a.iteritems():
 
 
 
-"""
+
 # Check a single account followers by id
 
 followers = data.get_bot_followers("1564722306", api, bom)
