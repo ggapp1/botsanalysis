@@ -5,17 +5,17 @@ import unicodedata
 
 def bot_score(user_id, bom):
 	print "\nchecking bot....\n"
+	print "id " + str(user_id)
 	user_score = 0
 	try:	
 		result = bom.check_account(user_id)
 		user_score = result['scores']['universal']
 		
 	except botometer.NoTimelineError:
-		print "user {} has no tweets".format(user_id)
+		print "failed, user has no tweets"
 			
 	except tweepy.TweepError:
-	    print("failed for user {}, probably has protected account").format(user_id)
-
+	    print("failed, user probably has protected account")
 	print "score "+str(user_score)
 	return user_score 
 
