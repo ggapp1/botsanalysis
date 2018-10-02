@@ -4,6 +4,8 @@ import botometer
 import unicodedata
 
 def bot_score(user_id, bom):
+	#returns the bot score of an user
+	
 	print "\nchecking bot....\n"
 	print "id " + str(user_id)
 	user_score = 0
@@ -40,39 +42,41 @@ def get_bot_followers(user_id, api, bom):
 	
 	return followers
 
-def get_bot_hashtag(hashtag, count, api, bom):
+def get_bots_by_hashtag(hashtag, api, bom):
 	#get bots that are tweeting a especific hashtag
+	#and save them in a file
 
-	bots = {}
+	bots_file = open(hashtag+"_bots", "w+")
 	i = 0
-
-	for tweet in tweepy.Cursor(api.search,q=hashtag,count=count,lang="pt", tweet_mode='extended').items():
-		
+	print "searching "+hashtag
+	for tweet in tweepy.Cursor(api.search,q=hashtag,count=50,lang="pt", tweet_mode='extended').items():
 		user_score = 0
-		reuser_score = 0
-		user_id = 0
-		reuser_id = 0
-		
-		if 'retweeted_status' in dir(tweet):
+    	rtuser_score = 0
+    	print tweet.text
+    	if 'retweeted_satus' in dir(tweet):
+	 
+	    	rtuser_id = tweet.retweeted_status.user.id
+	    	rtuser_score = bot_score(rtuser_id, bom)
+	 
+	    	if(rtuser_score > 0.7):
+	    		bots_file.write("{},{}\n".format(rtuser_id, rtuser_score))
+	    		i = i + 1
+	 
+		else:
+	 
+			user_id = tweet.user.id
+	    	user_score = bot_score(user_id, bom)
+	 
+	    	if(user_score > 0.17):
+	    		bots_file.write("{},{}\n".format(user_id, user_score)) 
+	    		i = i + 1
 
-			user_id = 	tweet.user.id
-			reuser_id = tweet.retweeted_status.user.id
-	
-			user_score = bot_score(user_id, bom)
-			reuser_score = bot_score(reuser_id, bom)
-	
-	   	else:
-	   		user_id = 	tweet.user.id
-			user_score = bot_score(user_id, bom)
-
-		i = i + 1
-		print "user "+str(i)
-
-	   	if(user_score > 0.6):
-	   		bots[user_id] = user_score
-		if(reuser_score > 0.6):
-	   		bots[reuser_id] = reuser_score
-	return bots
+		if(i > 15):
+			print "15 bots founded"
+			bots_file.close()
+			return;
+	print "bots founded: "+str(i)      
+	bots_file.close() 
 
 def get_tweets(user_id, api):
 
@@ -85,6 +89,8 @@ def get_tweets(user_id, api):
 			tweet_list.append(tweet)
 			print len(tweet_list)
 	return tweet_list
+
+	
 """
 def get_bot_following(user_id, api, bom):
 
