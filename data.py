@@ -10,7 +10,7 @@ def limit_handler(cursor):
 		try:
 			yield cursor.next()
 		except tweepy.RateLimitError:
-			(print "Sleeping...")
+			print("Sleeping...")
 			time.sleep(15 * 60)
 
 
@@ -25,7 +25,7 @@ def bot_score(user_id, bom):
 		user_score = result['scores']['universal']
 		
 	except botometer.NoTimelineError:
-		print "failed, user has no tweets"
+		print("failed, user has no tweets")
 			
 	except tweepy.TweepError:
 	    print("failed, user probably has protected account")
@@ -41,7 +41,7 @@ def get_bot_followers(user_id, api, bom):
 	for page in tweepy.Cursor(api.followers_ids, user_id=user_id).pages():
 		ids.extend(page)
 
-	print "user has {} followers".format(len(ids))
+	print("user has {} followers".format(len(ids)))
 	followers = {}
 
 	for user_id in ids:
@@ -62,22 +62,22 @@ def get_bots_by_hashtag(hashtag, api, bom):
 	print("searching "+hashtag)
 	for tweet in limit_handler(tweepy.Cursor(api.search,q=hashtag, count=3200, timeout=600).items()):
 		user_score = 0
-    	rtuser_score = 0
+		rtuser_score = 0
 
-    	if 'retweeted_status' in dir(tweet):
-	    	rtuser_id = tweet.retweeted_status.user.id
-	    	rtuser_score = bot_score(rtuser_id, bom)
+		if 'retweeted_status' in dir(tweet):
+			rtuser_id = tweet.retweeted_status.user.id
+			rtuser_score = bot_score(rtuser_id, bom)
 	 
-	    	if(rtuser_score > 0.7):
-	    		bots_file.write("{},{}\n".format(rtuser_id, rtuser_score))
-	    		i = i + 1 
+			if(rtuser_score > 0.7):
+				bots_file.write("{},{}\n".format(rtuser_id, rtuser_score))
+				i = i + 1 
 		else:
 			user_id = tweet.user.id
-	    	user_score = bot_score(user_id, bom)
+			user_score = bot_score(user_id, bom)
 	 
-	    	if(user_score > 0.17):
-	    		bots_file.write("{},{}\n".format(user_id, user_score)) 
-	    		i = i + 1
+			if(user_score > 0.17):
+				bots_file.write("{},{}\n".format(user_id, user_score)) 
+				i = i + 1
 
 		if(i > 15):
 			print("15 bots founded")
@@ -90,13 +90,10 @@ def get_bots_by_hashtag(hashtag, api, bom):
 def get_tweets(user_id, api):
 
 	tweet_list = []
-	print len(tweet_list)
-	print "teste"
 	for pages in tweepy.Cursor(api.user_timeline, id=user_id, count=1,include_rts = True,tweet_mode='extended'
 		).pages():        
 		for tweet in pages:
 			tweet_list.append(tweet)
-			print len(tweet_list)
 	return tweet_list
 
 	
