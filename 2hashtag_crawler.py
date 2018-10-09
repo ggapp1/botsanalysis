@@ -8,10 +8,11 @@ import botometer
 import data
 import unicodedata
 
-consumer_key = 'GzDn8QwV3mIdnStJFMyyl2B5P'
-consumer_secret= 'mwWVpg8wsYwU6SvLehCUJTTuBzDrspeqATghFm6fFXCQmOoklk'
-access_token = '513768992-EGca4a9hTSBWigfMBdUFd31n793XufuDqVLlT90O'
-access_token_secret= 'SjKQhu3VnTB2YawRrb7biKJXxwAbygZH2ETqu7YG2N3Zo'
+
+consumer_key = 'qEgHKHnL55g7k4U9xihiCzdVj'
+consumer_secret= 'QcUDHJS04wK5hrmlxV5C4gweiRPDca9JQoc4gp7ftHOTgZAdbf'
+access_token = '863573499436122112-LA60oJLBzwVnhZjGOUPzRsJcU1wYzs9'
+access_token_secret= '8CKFpp6qyxkAk1KfjW7kMRqJPoHKloppPrvd7Tjiwllyk'
 
 """
 consumer_key = 'dB3iaqcrW7WtmZnexrcSfgTgQ'

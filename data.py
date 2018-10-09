@@ -3,6 +3,17 @@ import time
 import botometer
 import unicodedata
 
+def limit_handler(cursor):
+	#deal with timeouts
+	print "## limit handler ##"
+	while True:
+		try:
+			yield cursor.next()
+		except tweepy.RateLimitError:
+			print "Sleeping..."
+			time.sleep(15 * 60)
+
+
 def bot_score(user_id, bom):
 	#returns the bot score of an user
 	
@@ -49,21 +60,19 @@ def get_bots_by_hashtag(hashtag, api, bom):
 	bots_file = open(hashtag+"_bots", "w+")
 	i = 0
 	print "searching "+hashtag
-	for tweet in tweepy.Cursor(api.search,q=hashtag,count=50,lang="pt", tweet_mode='extended').items():
+	for tweet in limit_handler(tweepy.Cursor(api.search,q=hashtag, count=3200, timeout=600).items()):
 		user_score = 0
     	rtuser_score = 0
-    	print tweet.text
-    	if 'retweeted_satus' in dir(tweet):
-	 
+    	print tweet.user.id
+
+    	if 'retweeted_status' in dir(tweet):
 	    	rtuser_id = tweet.retweeted_status.user.id
 	    	rtuser_score = bot_score(rtuser_id, bom)
 	 
 	    	if(rtuser_score > 0.7):
 	    		bots_file.write("{},{}\n".format(rtuser_id, rtuser_score))
-	    		i = i + 1
-	 
+	    		i = i + 1 
 		else:
-	 
 			user_id = tweet.user.id
 	    	user_score = bot_score(user_id, bom)
 	 
@@ -75,6 +84,7 @@ def get_bots_by_hashtag(hashtag, api, bom):
 			print "15 bots founded"
 			bots_file.close()
 			return;
+
 	print "bots founded: "+str(i)      
 	bots_file.close() 
 
