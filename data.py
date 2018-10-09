@@ -5,20 +5,20 @@ import unicodedata
 
 def limit_handler(cursor):
 	#deal with timeouts
-	print "## limit handler ##"
+	print("## limit handler ##")
 	while True:
 		try:
 			yield cursor.next()
 		except tweepy.RateLimitError:
-			print "Sleeping..."
+			(print "Sleeping...")
 			time.sleep(15 * 60)
 
 
 def bot_score(user_id, bom):
 	#returns the bot score of an user
 	
-	print "\nchecking bot....\n"
-	print "id " + str(user_id)
+	print("\nchecking bot....\n")
+	print("id " + str(user_id))
 	user_score = 0
 	try:	
 		result = bom.check_account(user_id)
@@ -29,7 +29,7 @@ def bot_score(user_id, bom):
 			
 	except tweepy.TweepError:
 	    print("failed, user probably has protected account")
-	print "score "+str(user_score)
+	print("score "+str(user_score))
 	return user_score 
 
 
@@ -59,11 +59,10 @@ def get_bots_by_hashtag(hashtag, api, bom):
 
 	bots_file = open(hashtag+"_bots", "w+")
 	i = 0
-	print "searching "+hashtag
+	print("searching "+hashtag)
 	for tweet in limit_handler(tweepy.Cursor(api.search,q=hashtag, count=3200, timeout=600).items()):
 		user_score = 0
     	rtuser_score = 0
-    	print tweet.user.id
 
     	if 'retweeted_status' in dir(tweet):
 	    	rtuser_id = tweet.retweeted_status.user.id
@@ -81,11 +80,11 @@ def get_bots_by_hashtag(hashtag, api, bom):
 	    		i = i + 1
 
 		if(i > 15):
-			print "15 bots founded"
+			print("15 bots founded")
 			bots_file.close()
 			return;
 
-	print "bots founded: "+str(i)      
+	print("bots founded: "+str(i))      
 	bots_file.close() 
 
 def get_tweets(user_id, api):
