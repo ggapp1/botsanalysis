@@ -1,0 +1,3 @@
+botometer==1.3
+networkx==2.1
+tweepy==3.5.0
