@@ -41,7 +41,7 @@ bom = botometer.Botometer(wait_on_ratelimit=True,
 
 
 
-hashtags = ["#EleNao"]
+hashtags = ["#EleNao", "#HaddadÉLula", "#HaddadSim", "#EleSim", "#Bolsonaro17"]
 
 
 for hashtag in hashtags:
