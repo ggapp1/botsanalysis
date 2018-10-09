@@ -75,7 +75,7 @@ def get_bots_by_hashtag(hashtag, api, bom):
 			user_id = tweet.user.id
 			user_score = bot_score(user_id, bom)
 	 
-			if(user_score > 0.17):
+			if(user_score > 0.7):
 				bots_file.write("{},{}\n".format(user_id, user_score)) 
 				i = i + 1
 
