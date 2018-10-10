@@ -59,6 +59,10 @@ def get_bots_by_hashtag(hashtag, api, bom):
 	#and save them in a file
 
 	bots_file = open(hashtag+"_bots", "w+")
+	bots_file.write("user_id score\n")
+	bots_file.flush()
+	os.fsync(bots_file.fileno())
+
 	i = 0
 	print("searching "+hashtag)
 	for tweet in limit_handler(tweepy.Cursor(api.search,q=hashtag, count=3200, timeout=600).items()):
@@ -67,21 +71,21 @@ def get_bots_by_hashtag(hashtag, api, bom):
 
 		if 'retweeted_status' in dir(tweet):
 			rtuser_id = tweet.retweeted_status.user.id
-			rtuser_score = bot_score(rtuser_id, bom)
+#			rtuser_score = bot_score(rtuser_id, bom)
 	 
-			if(rtuser_score > 0.7):
-				bots_file.write("{},{}\n".format(rtuser_id, rtuser_score))
-				i = i + 1 
-				bots_file.flush()
-				os.fsync(bots_file.fileno())
+#			if(rtuser_score > 0.7):
+			bots_file.write("{},{}\n".format(rtuser_id, rtuser_score))
+#				i = i + 1 
+			bots_file.flush()
+			os.fsync(bots_file.fileno())
 		else:
 			user_id = tweet.user.id
-			user_score = bot_score(user_id, bom)
+#			user_score = bot_score(user_id, bom)
 	 
-			if(user_score > 0.7):
-				bots_file.flush()
-				os.fsync(bots_file.fileno()) 
-				i = i + 1
+#			if(user_score > 0.7):
+			bots_file.flush()
+			os.fsync(bots_file.fileno()) 
+#				i = i + 1
 
 		if(i > 15):
 			print("15 bots founded")
