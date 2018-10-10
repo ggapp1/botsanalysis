@@ -71,21 +71,21 @@ def get_bots_by_hashtag(hashtag, api, bom):
 
 		if 'retweeted_status' in dir(tweet):
 			rtuser_id = tweet.retweeted_status.user.id
-#			rtuser_score = bot_score(rtuser_id, bom)
+			rtuser_score = bot_score(rtuser_id, bom)
 	 
-#			if(rtuser_score > 0.7):
+			if(rtuser_score > 0.7):
 			bots_file.write("{},{}\n".format(rtuser_id, rtuser_score))
-#				i = i + 1 
+				i = i + 1 
 			bots_file.flush()
 			os.fsync(bots_file.fileno())
 		else:
 			user_id = tweet.user.id
-#			user_score = bot_score(user_id, bom)
+			user_score = bot_score(user_id, bom)
 	 
-#			if(user_score > 0.7):
+			if(user_score > 0.7):
 			bots_file.flush()
 			os.fsync(bots_file.fileno()) 
-#				i = i + 1
+				i = i + 1
 
 		if(i > 15):
 			print("15 bots founded")
