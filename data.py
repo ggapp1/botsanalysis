@@ -83,6 +83,7 @@ def get_bots_by_hashtag(hashtag, api, bom):
 			user_score = bot_score(user_id, bom)
 	 
 			if(user_score > 0.7):
+				bots_file.write("{},{}\n".format(user_id, user_score))
 				bots_file.flush()
 				os.fsync(bots_file.fileno()) 
 				i = i + 1
