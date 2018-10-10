@@ -74,17 +74,17 @@ def get_bots_by_hashtag(hashtag, api, bom):
 			rtuser_score = bot_score(rtuser_id, bom)
 	 
 			if(rtuser_score > 0.7):
-			bots_file.write("{},{}\n".format(rtuser_id, rtuser_score))
+				bots_file.write("{},{}\n".format(rtuser_id, rtuser_score))
 				i = i + 1 
-			bots_file.flush()
-			os.fsync(bots_file.fileno())
+				bots_file.flush()
+				os.fsync(bots_file.fileno())
 		else:
 			user_id = tweet.user.id
 			user_score = bot_score(user_id, bom)
 	 
 			if(user_score > 0.7):
-			bots_file.flush()
-			os.fsync(bots_file.fileno()) 
+				bots_file.flush()
+				os.fsync(bots_file.fileno()) 
 				i = i + 1
 
 		if(i > 15):
