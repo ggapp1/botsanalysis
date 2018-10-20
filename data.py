@@ -4,6 +4,20 @@ import botometer
 import unicodedata
 import os
 
+def generate_API():
+	consumer_key = 'GzDn8QwV3mIdnStJFMyyl2B5P'
+	consumer_secret= 'mwWVpg8wsYwU6SvLehCUJTTuBzDrspeqATghFm6fFXCQmOoklk'
+	access_token = '513768992-EGca4a9hTSBWigfMBdUFd31n793XufuDqVLlT90O'
+	access_token_secret= 'SjKQhu3VnTB2YawRrb7biKJXxwAbygZH2ETqu7YG2N3Zo'
+
+	auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+	auth.set_access_token(access_token, access_token_secret)
+
+	api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+	
+	return api
+
+
 def limit_handler(cursor):
 	#deal with timeouts
 	print("## limit handler ##")
@@ -17,9 +31,7 @@ def limit_handler(cursor):
 
 def bot_score(user_id, bom):
 	#returns the bot score of an user
-	
-	print("\nchecking bot....\n")
-	print("id " + str(user_id))
+
 	user_score = 0
 	try:	
 		result = bom.check_account(user_id)
@@ -30,9 +42,19 @@ def bot_score(user_id, bom):
 			
 	except tweepy.TweepError:
 	    print("failed, user probably has protected account")
-	print("score "+str(user_score))
+
 	return user_score 
 
+def get_followers(user_id, api):
+	# return account followers by id
+	ids = []
+
+	for page in tweepy.Cursor(api.followers_ids, user_id=user_id).pages():
+		ids.extend(page)
+
+	print("user has {} followers".format(len(ids)))
+
+	return ids
 
 def get_bot_followers(user_id, api, bom):
 	# Check a single account followers by id
@@ -54,6 +76,9 @@ def get_bot_followers(user_id, api, bom):
 	
 	return followers
 
+
+
+
 def get_bots_by_hashtag(hashtag, api, bom):
 	#get bots that are tweeting a especific hashtag
 	#and save them in a file
@@ -71,25 +96,25 @@ def get_bots_by_hashtag(hashtag, api, bom):
 
 		if 'retweeted_status' in dir(tweet):
 			rtuser_id = tweet.retweeted_status.user.id
-			rtuser_score = bot_score(rtuser_id, bom)
+#			rtuser_score = bot_score(rtuser_id, bom)
 	 
-			if(rtuser_score > 0.7):
-				bots_file.write("{},{}\n".format(rtuser_id, rtuser_score))
-				i = i + 1 
-				bots_file.flush()
-				os.fsync(bots_file.fileno())
+	#		if(rtuser_score > 0.7):
+			bots_file.write("{},{}\n".format(rtuser_id, rtuser_score))
+			i = i + 1 
+			bots_file.flush()
+			os.fsync(bots_file.fileno())
 		else:
 			user_id = tweet.user.id
-			user_score = bot_score(user_id, bom)
+#			user_score = bot_score(user_id, bom)
 	 
-			if(user_score > 0.7):
-				bots_file.write("{},{}\n".format(user_id, user_score))
-				bots_file.flush()
-				os.fsync(bots_file.fileno()) 
-				i = i + 1
+#			if(user_score > 0.7):
+			bots_file.write("{},{}\n".format(user_id, user_score))
+			bots_file.flush()
+			os.fsync(bots_file.fileno()) 
+			i = i + 1
 
-		if(i > 15):
-			print("15 bots founded")
+		if(i > 100000):
+			print("enough")
 			bots_file.close()
 			return;
 
@@ -105,6 +130,18 @@ def get_tweets(user_id, api):
 			tweet_list.append(tweet)
 	return tweet_list
 
+
+
+def get_following(user_id, api):
+	# return account following by id
+	ids = []
+
+	for page in tweepy.Cursor(api.friends, user_id=user_id).pages():
+		ids.extend(page)
+
+	print("user has {} following".format(len(ids)))
+	
+	return ids
 	
 """
 def get_bot_following(user_id, api, bom):
