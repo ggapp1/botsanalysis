@@ -53,7 +53,7 @@ def generate_auxunif(G):
 
 def init_graph():
 	G = nx.DiGraph()   
-	files = ["checked_#BolsonaroNao_bots" ]
+	files = []
 	l = [6,7,8,9,10]
 	for n in l:
 		G.add_node(n)
@@ -63,7 +63,7 @@ def init_graph():
 	generate_auxunif(G)
 	print("\n\n")
 	print(aux_unif)
-	for i in range(10):
+	while True:
 		next_node(G)
 	print("\n\n")
 	print(visited_nodes)		

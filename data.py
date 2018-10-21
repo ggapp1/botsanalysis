@@ -71,7 +71,7 @@ def get_bot_followers(user_id, api, bom):
 
 		user_score = bot_score(user_id, bom)
 		    
-		if (user_score > 0.6):
+		if (user_score > 0.)7:
 			followers[user_id] = result['scores']['universal']
 	
 	return followers
