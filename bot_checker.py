@@ -34,8 +34,7 @@ bom = botometer.Botometer(wait_on_ratelimit=True,
                           **twitter_app_auth)
 
 files = [ 
-		"#DebateNaGlobo_bots",
-		"#EleNao_bots", "#HaddadSim_bots", "#Bolsonaro17_bots" ]
+		"#BolsonaroNao_bots" ]
 
 for f in files:
 	print("### CHECKING "+f)
