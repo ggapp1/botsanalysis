@@ -49,7 +49,7 @@ def get_followers(user_id, api):
 	# return account followers by id
 	ids = []
 
-	for page in tweepy.Cursor(api.followers_ids, user_id=user_id).pages():
+	for page in limit_handler(tweepy.Cursor(api.followers_ids, user_id=user_id, timeout=600).pages()):
 		ids.extend(page)
 
 	print("user has {} followers".format(len(ids)))
@@ -136,7 +136,7 @@ def get_following(user_id, api):
 	# return account following by id
 	ids = []
 
-	for page in tweepy.Cursor(api.friends, user_id=user_id).pages():
+	for page in limit_handler(tweepy.Cursor(api.friends, user_id=user_id, , timeout=600).pages()):
 		ids.extend(page)
 
 	print("user has {} following".format(len(ids)))
