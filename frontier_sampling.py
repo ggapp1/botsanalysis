@@ -54,7 +54,7 @@ def generate_auxunif(G):
 def init_graph():
 	G = nx.DiGraph()   
 	files = []
-	l = [6,7,8,9,10]
+	l = [6,7]
 	for n in l:
 		G.add_node(n)
 		L_nodes.append(n)
@@ -63,10 +63,12 @@ def init_graph():
 	generate_auxunif(G)
 	print("\n\n")
 	print(aux_unif)
-	while True:
-		next_node(G)
-	print("\n\n")
-	print(visited_nodes)		
+	#while True:
+	#	next_node(G)
+	#print("\n\n")
+	#print(visited_nodes)
+	print(G.nodes)
+	print(G.edges)		
 	return G	
 """	
 	for f in files:

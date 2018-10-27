@@ -3,6 +3,7 @@ import time
 import botometer
 import unicodedata
 import os
+import time
 
 def generate_API():
 	consumer_key = 'GzDn8QwV3mIdnStJFMyyl2B5P'
@@ -49,11 +50,27 @@ def get_followers(user_id, api):
 	# return account followers by id
 	ids = []
 
+	sleeptime = 0
+	pages = limit_handler(tweepy.Cursor(api.followers_ids, user_id=user_id, timeout=600).items())
+
+	while True:
+	    try:
+	        page = next(pages)
+	        print(page)
+	        ids.append(page)
+	        time.sleep(sleeptime)
+
+	    except tweepy.TweepError: #taking extra care of the "rate limit exceeded"
+	        time.sleep(60*15) 
+	        page = next(pages)
+	    except StopIteration:
+	        break
+		
+	"""
 	for page in limit_handler(tweepy.Cursor(api.followers_ids, user_id=user_id, timeout=600).pages()):
 		ids.extend(page)
-
+	"""
 	print("user has {} followers".format(len(ids)))
-
 	return ids
 
 def get_bot_followers(user_id, api, bom):
@@ -71,7 +88,7 @@ def get_bot_followers(user_id, api, bom):
 
 		user_score = bot_score(user_id, bom)
 		    
-		if (user_score > 0.)7:
+		if (user_score > 0.7):
 			followers[user_id] = result['scores']['universal']
 	
 	return followers

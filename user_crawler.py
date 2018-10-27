@@ -51,6 +51,10 @@ for user_id in users:
   for follower in followers:
     fl_score = data.bot_score(user_id, bom)
     t = t + 1
+    
+  flbots_file.write("{},{}\n".format(i, t))
+  flbots_file.close()
+"""
     if(fl_score > 0.7)
       flbots_file.write("{},{}\n".format(user_id, fl_score))
       i = i + 1 
@@ -61,5 +65,5 @@ for user_id in users:
       flbots_file.write("{},{}\n".format(i, t))
       flbots_file.close()
       break    
-
+"""
 
