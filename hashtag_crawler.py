@@ -40,8 +40,24 @@ bom = botometer.Botometer(wait_on_ratelimit=True,
                           **twitter_app_auth)
 
 
+
+tweets = data.get_tweets(3343068207, api)
+
+f = open("fsteinicial", "w+")
+
+for tweet in tweets:
+  if 'retweeted_status' in dir(tweet):
+    text = tweet.retweeted_status.full_text
+  else:
+    text = tweet.full_text
+  nfkd_form = unicodedata.normalize('NFKD', text)
+  only_ascii = nfkd_form.encode('ASCII', 'ignore')    
+  f.write(str(only_ascii)+"\n")
+  f.flush()
+f.close()
+
 #get net of haddad and bolso
-users = [354095556, 128372940]
+#users = [354095556, 128372940]
 """
 hashtags = ["#DebateSBT"]
 

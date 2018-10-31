@@ -50,7 +50,6 @@ def get_followers(user_id, api):
 	# return account followers by id
 	ids = []
 
-	sleeptime = 0
 	pages = limit_handler(tweepy.Cursor(api.followers_ids, user_id=user_id, timeout=600).items())
 
 	while True:
@@ -141,7 +140,7 @@ def get_bots_by_hashtag(hashtag, api, bom):
 def get_tweets(user_id, api):
 
 	tweet_list = []
-	for pages in tweepy.Cursor(api.user_timeline, id=user_id, count=1,include_rts = True,tweet_mode='extended'
+	for pages in tweepy.Cursor(api.user_timeline, id=user_id, count=1,include_rts = False,tweet_mode='extended'
 		).pages():        
 		for tweet in pages:
 			tweet_list.append(tweet)
