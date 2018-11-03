@@ -49,13 +49,12 @@ def bot_score(user_id, bom):
 def get_followers(user_id, api):
 	# return account followers by id
 	ids = []
-
+	sleeptime = 1
 	pages = limit_handler(tweepy.Cursor(api.followers_ids, user_id=user_id, timeout=600).items())
 
 	while True:
 	    try:
 	        page = next(pages)
-	        print(page)
 	        ids.append(page)
 	        time.sleep(sleeptime)
 
@@ -151,9 +150,20 @@ def get_tweets(user_id, api):
 def get_following(user_id, api):
 	# return account following by id
 	ids = []
+	sleeptime = 1
+	pages = limit_handler(tweepy.Cursor(api.friends, user_id=user_id, timeout=600).items())
 
-	for page in limit_handler(tweepy.Cursor(api.friends, user_id=user_id, timeout=600).pages()):
-		ids.extend(page)
+	while True:
+	    try:
+	        page = next(pages)
+	        ids.append(page)
+	        time.sleep(sleeptime)
+
+	    except tweepy.TweepError: #taking extra care of the "rate limit exceeded"
+	        time.sleep(60*15) 
+	        page = next(pages)
+	    except StopIteration:
+	        break
 
 	print("user has {} following".format(len(ids)))
 	
