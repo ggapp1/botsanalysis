@@ -33,7 +33,7 @@ bom = botometer.Botometer(wait_on_ratelimit=True,
                           mashape_key=mashape_key,
                           **twitter_app_auth)
 
-files = [ "suffle_#Bolsonaro17"    ,  "suffle_#bolsonaroNao"   , "suffle_#BrasilComBolsonaro"
+files = [   "suffle_#bolsonaroNao"   , "suffle_#BrasilComBolsonaro"
 "suffle_#bolsonaroCagao"  ,    "suffle_#bolsonaroSim "  ]
 
 for f in files:
