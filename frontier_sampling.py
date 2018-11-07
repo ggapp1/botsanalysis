@@ -12,8 +12,8 @@ file = open("visited", "w+")
 
 def create_neighbours(G):
 	for user_id in list(G.nodes):
-		followers = [1.2,3] #data.get_followers(user_id, api)
-		following = [1, 2, 3]#data.get_following(user_id, api)
+		followers =  data.get_followers(user_id, api)
+		following = data.get_following(user_id, api)
 		for follower in followers:
 			G.add_edge(user_id, follower)
 		for follow in following:
@@ -38,6 +38,8 @@ def next_node(G):
 		edges_list = [i[1] for i in edges]
 		print("## edges list")
 		print(edges_list)
+		print(rand)
+		print(edges)
 
 	rand_edge = random.choice(edges_list)
 	print("selected: "+ str(rand_edge))
@@ -58,9 +60,6 @@ def generate_auxunif(G):
 		nd = nd + 1	
 
 #def frontier_sampling(G):
-
-
-
 
 def init_graph():
 	G = nx.DiGraph()   
