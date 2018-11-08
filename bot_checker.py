@@ -33,8 +33,11 @@ bom = botometer.Botometer(wait_on_ratelimit=True,
                           mashape_key=mashape_key,
                           **twitter_app_auth)
 
-files = [ "suffle_#Bolsonaro17"    ,  "suffle_#bolsonaroNao"   , "suffle_#BrasilComBolsonaro"
-"suffle_#bolsonaroCagao"  ,    "suffle_#bolsonaroSim "  ]
+files = ["#BrasilComBolsonaro", "#bolsonaroCagao"  ,    "#bolsonaroSim " ,
+"#DebateNaBand_bots",	  "#EleNao_bots","#VemProDebate_bots" ,
+	    "#DebateNaGlobo_bots" ,"#EleSim_bots"	,  "#ViraViraCIR0_bots",
+    "#DebateNaRecord_bots" ,"#ForaPT_bots","#DebateSBT_bots" ,
+    "#HaddadÉLula_bots", "#Eleições2018_bots",	"#HaddadSim_bots"]
 
 for f in files:
 	print("### CHECKING "+f)
@@ -45,7 +48,7 @@ for f in files:
 	bots_file.flush()
 	os.fsync(bots_file.fileno())
 
-	uf = pd.read_csv("suffle/"+f, skiprows=1, names = ['user_id','score'])
+	uf = pd.read_csv("suffle/suffle_"+f, skiprows=1, names = ['user_id','score'])
 	user_list = uf['user_id'].tolist()
 
 	for user_id in user_list:
@@ -68,3 +71,4 @@ for f in files:
 
 	print("bots founded: "+ str(i))
 	bots_file.close()		 
+
