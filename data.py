@@ -137,9 +137,9 @@ def get_bots_by_hashtag(hashtag, api, bom):
 	bots_file.close() 
 
 def get_tweets(user_id, api):
-
+	print("test")
 	tweet_list = []
-	for pages in tweepy.Cursor(api.user_timeline, id=user_id, count=1,include_rts = False,tweet_mode='extended'
+	for pages in tweepy.Cursor(api.user_timeline, id=user_id, count=1,timeout=600,lsinclude_rts = False,tweet_mode='extended'
 		).pages():        
 		for tweet in pages:
 			tweet_list.append(tweet)
