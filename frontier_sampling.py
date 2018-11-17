@@ -11,12 +11,26 @@ aux_unif = []
 file = open("visited", "w+")
 
 def create_neighbours(G):
+	print("creating create_neighbours")
 	for user_id in list(G.nodes):
 		followers =  data.get_followers(user_id, api)
 		following = data.get_following(user_id, api)
 		for follower in followers:
-			G.add_edge(user_id, follower)
+			if(user_id not in visited_nodes): 
+				G.add_edge(user_id, follower)
 		for follow in following:
+			if(user_id not in visited_nodes):	
+				G.add_edge(follow, user_id)
+
+def add_node(G, user_id):
+	print("adding "+str(user_id))
+	followers =  data.get_followers(user_id, api)
+	following = data.get_following(user_id, api)
+	for follower in followers:
+		if(user_id not in visited_nodes): 
+			G.add_edge(user_id, follower)
+	for follow in following:
+		if(user_id not in visited_nodes):	
 			G.add_edge(follow, user_id)
 
 
@@ -47,6 +61,7 @@ def next_node(G):
 	visited_nodes.append(rand_edge)
 
 	write_file(rand_edge)
+	add_node(G, rand_edge)
 	generate_auxunif(G)
 
 

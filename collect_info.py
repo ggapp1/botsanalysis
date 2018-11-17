@@ -10,7 +10,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 
 
 def tfidf_simples():
-	f = open("fsteinicial", "r")
+	f = open("tweets_1037466257833041920", "r")
 	corpus = f.read()
 	corpus = [corpus]
 	vectorizer = CountVectorizer()
@@ -35,10 +35,10 @@ def teste():
 	from sklearn.feature_extraction.text import TfidfVectorizer
 	from sklearn.cluster import KMeans
 	from sklearn.metrics import adjusted_rand_score
-
+	documents = []
 	with open("fsteinicial") as f:
 		for line in f:
-			documents.appen(line)
+			documents.append(line)
 
 	vectorizer = TfidfVectorizer(stop_words='english')
 	X = vectorizer.fit_transform(documents)

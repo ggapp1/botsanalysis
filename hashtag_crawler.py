@@ -120,10 +120,10 @@ for user in users:
   tweets = data.get_tweets(user, api)
   for tweet in tweets:
     if 'retweeted_status' in dir(tweet):
-      text = tweet.retweeted_status.full_text
+      text = tweet.retweeted_status#.full_text
     else:
-      text = tweet.full_text
-    nfkd_form = unicodedata.normalize('NFKD', text)
+      text = tweet#.full_text
+    nfkd_form = unicodedata.normalize('NFKD', str(text))
     only_ascii = nfkd_form.encode('ASCII', 'ignore')    
     f.write(str(only_ascii.decode('utf-8'))+"\n")
     f.flush()
