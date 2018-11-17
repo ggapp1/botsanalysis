@@ -55,17 +55,27 @@ def get_followers(user_id, api):
 	while True:
 	    try:
 	        page = next(pages)
-	        ids.append(page)
+	        for tweet in page:
+	        	ids.append(tweet)
 	        time.sleep(sleeptime)
 
-	    except tweepy.TweepError: #taking extra care of the "rate limit exceeded"
+	    except tweepy.TweepError as e: #taking extra care of the "rate limit exceeded"
+	        print(e.api_code)
 	        time.sleep(60) 
-	        page = next(pages)
+	        try:
+	        	page = next(pages)
+	        except tweepy.TweepError as e:
+	        	print(e.api_code)
+	        	print("failed, user probably has protected account")
+	   	    	print(user_id)
+	   	    	return ids
+
 	    except StopIteration:
 	        break
 		
 	    if(len(ids) >= 10000):
-		    break
+		    print("user has {} followers".format(len(ids)))
+		    return ids
 	"""
 	for page in limit_handler(tweepy.Cursor(api.followers_ids, user_id=user_id, timeout=600).pages()):
 		ids.extend(page)
@@ -156,20 +166,32 @@ def get_following(user_id, api):
 	# return account following by id
 	ids = []
 	sleeptime = 5
+	pages = tweepy.Cursor(api.friends, user_id=user_id, timeout=600).pages()
+
 	while True:
 	    try:
 	        page = next(pages)
-	        ids.append(page)
+	        for tweet in page:
+	        	ids.append(tweet)
 	        time.sleep(sleeptime)
 
-	    except tweepy.TweepError: #taking extra care of the "rate limit exceeded"
-	        time.sleep(60*15) 
-	        page = next(pages)
+	    except tweepy.TweepError. e: #taking extra care of the "rate limit exceeded"
+	        print(e.api_code)
+	        time.sleep(60) 
+	        try:
+	        	page = next(pages)
+	        except tweepy.TweepError as e:
+	            print(e.api_code)
+	            print("failed, user probably has protected account")
+	            print(user_id)
+	            return ids
+
 	    except StopIteration:
 	        break
-
+		
 	    if(len(ids) >= 10000):
-	        break
+		    print("user has {} followee".format(len(ids)))
+		    return ids	
 
 	print("user has {} following".format(len(ids)))
 	

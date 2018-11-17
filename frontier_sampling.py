@@ -14,24 +14,24 @@ def create_neighbours(G):
 	print("creating create_neighbours")
 	for user_id in list(G.nodes):
 		followers =  data.get_followers(user_id, api)
-		following = data.get_following(user_id, api)
+#		following = data.get_following(user_id, api)
 		for follower in followers:
-			if(user_id not in visited_nodes): 
+			if(follower not in visited_nodes): 
 				G.add_edge(user_id, follower)
-		for follow in following:
-			if(user_id not in visited_nodes):	
-				G.add_edge(follow, user_id)
+	#	for follow in following:
+#			if(user_id not in visited_nodes):	
+#				G.add_edge(follow, user_id)
 
 def add_node(G, user_id):
 	print("adding "+str(user_id))
 	followers =  data.get_followers(user_id, api)
-	following = data.get_following(user_id, api)
+	#following = data.get_following(user_id, api)
 	for follower in followers:
-		if(user_id not in visited_nodes): 
+		if(follower not in visited_nodes): 
 			G.add_edge(user_id, follower)
-	for follow in following:
-		if(user_id not in visited_nodes):	
-			G.add_edge(follow, user_id)
+	#for follow in following:
+	#	if(user_id not in visited_nodes):	
+	#		G.add_edge(follow, user_id)
 
 
 def write_file(rand_edge):
@@ -39,19 +39,14 @@ def write_file(rand_edge):
 	file.write("\n")
 	file.flush()
 
-def next_node(G):
+def next_node(G, aux_unif):
 
 	print("\n### next node ###")
-	edges_list = []
-
-	while not edges_list:
-		print("edges list")
-		rand = random.choice(aux_unif)
-		edges = G.edges(L_nodes[rand])
-		edges_list = [i[1] for i in edges]
-		print("## edges list")
-		print(len(edges_list))
-		print(rand)
+	rand = random.choice(aux_unif)
+	edges = G.edges(L_nodes[rand])
+	edges_list = [i[1] for i in edges]
+	print("## edges list")
+	print(len(edges_list))
 
 	rand_edge = random.choice(edges_list)
 	print("selected: "+ str(rand_edge))
@@ -60,17 +55,22 @@ def next_node(G):
 
 	write_file(rand_edge)
 	add_node(G, rand_edge)
-	generate_auxunif(G)
+
 
 
 def generate_auxunif(G):
 	nd = 0
 	aux_unif = []
-	for user_id in range(len(L_nodes)):
-		print("node"+str(L_nodes[user_id]))
-		for i in range(G.degree(L_nodes[user_id])):
-			aux_unif.append(nd)
-		nd = nd + 1	
+	print("generating")
+	print(len(L_nodes))
+	for user_id in L_nodes:
+		print(user_id)
+		print(G.out_degree(user_id))
+		if(G.out_degree(user_id) > 0):
+			for i in range(G.degree(user_id)):
+				aux_unif.append(nd)
+		nd = nd + 1
+	return aux_unif	
 
 #def frontier_sampling(G):
 
@@ -82,16 +82,17 @@ def init_graph():
 		L_nodes.append(n)
 
 	create_neighbours(G)
-	generate_auxunif(G)
+	aux_unif = generate_auxunif(G)
 
 	i = 0
-	for i in range(99999999999):
-		next_node(G)
+	for i in range(99):
+		next_node(G, aux_unif)
+		aux_unif = generate_auxunif(G)
+		if not aux_unif:
+			break
 
 	print("\n\n")
 	print(visited_nodes)
-	print(G.nodes)
-	print(G.edges)
 	file.close()		
 	return G	
 
