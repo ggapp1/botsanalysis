@@ -32,14 +32,12 @@ def next_node(G):
 
 	while not edges_list:
 		print("edges list")
-		print(edges_list)
 		rand = random.choice(aux_unif)
 		edges = G.edges(L_nodes[rand])
 		edges_list = [i[1] for i in edges]
 		print("## edges list")
-		print(edges_list)
+		print(len(edges_list))
 		print(rand)
-		print(edges)
 
 	rand_edge = random.choice(edges_list)
 	print("selected: "+ str(rand_edge))
@@ -52,7 +50,7 @@ def next_node(G):
 
 def generate_auxunif(G):
 	nd = 0
-
+	aux_unif = []
 	for user_id in range(len(L_nodes)):
 		print("node"+str(L_nodes[user_id]))
 		for i in range(G.degree(L_nodes[user_id])):
