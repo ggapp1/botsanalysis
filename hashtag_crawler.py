@@ -8,10 +8,10 @@ import botometer
 import data
 import unicodedata
 
-consumer_key = 'GzDn8QwV3mIdnStJFMyyl2B5P'
-consumer_secret= 'mwWVpg8wsYwU6SvLehCUJTTuBzDrspeqATghFm6fFXCQmOoklk'
-access_token = '513768992-EGca4a9hTSBWigfMBdUFd31n793XufuDqVLlT90O'
-access_token_secret= 'SjKQhu3VnTB2YawRrb7biKJXxwAbygZH2ETqu7YG2N3Zo'
+consumer_key = 'tWKbAjFMDKB2vT5pvm5CH3HkB'
+consumer_secret= 'hf5UIPFJymZ6XtYDqdNq7LVfLEztcsvRrW1ZLwbF8jzMHV0AXG'
+access_token = '513768992-JfWa1xMpBFKQNWfHlUncCVDCPxDOUVs8shUegVQU'
+access_token_secret= 'tRQcBExN1vG6otAZnM0L2QHyUupM2qJIz04wcFqkCYoVY'
 
 """
 consumer_key = 'dB3iaqcrW7WtmZnexrcSfgTgQ'
@@ -35,24 +35,97 @@ twitter_app_auth = {
     'access_token_secret': access_token_secret,
   }
 
-bom = botometer.Botometer(wait_on_ratelimit=True,
-                          mashape_key=mashape_key,
-                          **twitter_app_auth)
+#bom = botometer.Botometer(wait_on_ratelimit=True,
+#                          mashape_key=mashape_key,
+#                          **twitter_app_auth)
 
-users = [1037466257833041920, 953305211694534656, 1050170040794918912, 299285259, 114312114]
+users = [1020798087449776128,
+67150902,
+58930813,
+4896510833,
+73995962,
+1042201567695396864,
+25761099,
+1444645189,
+34366699,
+77641038,
+1020798087449776128,
+139219536,
+250783433,
+47754867,
+327715048,
+42914158,
+462832634,
+67150902,
+4896510833,
+179753394,
+1042201567695396864,
+139219536,
+1009248581189033984,
+75270377,
+67150902,
+2505521406,
+4060086012,
+1020798087449776128,
+14594813,
+34366699,
+41213062,
+527049338,
+45191045,
+1020798087449776128,
+14594813,
+1042201567695396864,
+139219536,
+14594813,
+824976268546408448,
+67150902,
+34366699,
+30857469,
+788794760764985344,
+201867844,
+16909667,
+14594813,
+331218846,
+75270377,
+14594813,
+139219536,
+1020798087449776128,
+709371326822277121,
+1042201567695396864,
+1258012146,
+794866608,
+2493175040,
+14594813,
+67150902,
+14594813,
+34261231,
+139219536,
+67150902,
+14594813,
+139219536,
+14594813,
+1042201567695396864,
+57138606,
+75270377,
+1042201567695396864,
+1020798087449776128,
+8802752,
+3175,
+139219536,
+14594813,
+1020798087449776128]
 for user in users:
-  
-
-  f = open("tweets_"+str(user), "w+")
+  f = open("files/tweets_"+str(user), "w+")
+  print("got")
   tweets = data.get_tweets(user, api)
   for tweet in tweets:
     if 'retweeted_status' in dir(tweet):
-      text = tweet.retweeted_status.full_text
+      text = tweet.retweeted_status#.full_text
     else:
-      text = tweet.full_text
-    nfkd_form = unicodedata.normalize('NFKD', text)
+      text = tweet#.full_text
+    nfkd_form = unicodedata.normalize('NFKD', str(text))
     only_ascii = nfkd_form.encode('ASCII', 'ignore')    
-    f.write(str(only_ascii)+"\n")
+    f.write(str(only_ascii.decode('utf-8'))+"\n")
     f.flush()
   f.close()
 

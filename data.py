@@ -14,7 +14,7 @@ def generate_API():
 	auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 	auth.set_access_token(access_token, access_token_secret)
 
-	api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+	api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True)
 	
 	return api
 
@@ -50,7 +50,7 @@ def get_followers(user_id, api):
 	# return account followers by id
 	ids = []
 	sleeptime = 1
-	pages = limit_handler(tweepy.Cursor(api.followers_ids, user_id=user_id, timeout=600).items())
+	pages = tweepy.Cursor(api.followers_ids, user_id=user_id, timeout=600).pages()
 
 	while True:
 	    try:
@@ -64,6 +64,8 @@ def get_followers(user_id, api):
 	    except StopIteration:
 	        break
 		
+	    if(len(ids) >= 10000):
+		    break
 	"""
 	for page in limit_handler(tweepy.Cursor(api.followers_ids, user_id=user_id, timeout=600).pages()):
 		ids.extend(page)
@@ -137,12 +139,15 @@ def get_bots_by_hashtag(hashtag, api, bom):
 	bots_file.close() 
 
 def get_tweets(user_id, api):
-
+	print("test")
 	tweet_list = []
-	for pages in tweepy.Cursor(api.user_timeline, id=user_id, count=1,include_rts = False,tweet_mode='extended'
+	
+	for pages in tweepy.Cursor(api.user_timeline, id=user_id, count=200,timeout=600,lsinclude_rts = False,tweet_mode='extended'
 		).pages():        
 		for tweet in pages:
 			tweet_list.append(tweet)
+	
+	print("len "+str(len(tweet_list)))
 	return tweet_list
 
 
@@ -151,7 +156,7 @@ def get_following(user_id, api):
 	# return account following by id
 	ids = []
 	sleeptime = 1
-	pages = limit_handler(tweepy.Cursor(api.friends, user_id=user_id, timeout=600).items())
+	pages = tweepy.Cursor(api.friends, user_id=user_id, timeout=600).pages()
 
 	while True:
 	    try:
@@ -163,6 +168,9 @@ def get_following(user_id, api):
 	        time.sleep(60*15) 
 	        page = next(pages)
 	    except StopIteration:
+	        break
+
+	    if(len(ids) >= 10000):
 	        break
 
 	print("user has {} following".format(len(ids)))
