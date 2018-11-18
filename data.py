@@ -51,7 +51,6 @@ def get_followers(user_id, api):
 	ids = []
 	sleeptime = 5  
 	pages = tweepy.Cursor(api.followers_ids, user_id=user_id, timeout=600).pages()
-	print("seguidores'")
 	while True:
 	    try:
 	        page = next(pages)

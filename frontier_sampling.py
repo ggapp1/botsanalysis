@@ -11,27 +11,26 @@ aux_unif = []
 file = open("visited", "w+")
 
 def create_neighbours(G):
-	print("creating create_neighbours")
+	print("\n- creating create_neighbours")
 	for user_id in list(G.nodes):
 		followers =  data.get_followers(user_id, api)
-#		following = data.get_following(user_id, api)
+		following = data.get_following(user_id, api)
 		for follower in followers:
-			if(follower not in visited_nodes): 
-				G.add_edge(user_id, follower)
-	#	for follow in following:
-#			if(user_id not in visited_nodes):	
-#				G.add_edge(follow, user_id)
+			G.add_edge(user_id, follower)
+		for follow in following:	
+			G.add_edge(follow, user_id)
+		visited_nodes.append(user_id)
 
 def add_node(G, user_id):
-	print("adding "+str(user_id))
+	print("\n+ adding "+str(user_id))
 	followers =  data.get_followers(user_id, api)
-	#following = data.get_following(user_id, api)
+	following = data.get_following(user_id, api)
 	for follower in followers:
 		if(follower not in visited_nodes): 
 			G.add_edge(user_id, follower)
-	#for follow in following:
-	#	if(user_id not in visited_nodes):	
-	#		G.add_edge(follow, user_id)
+	for follow in following:
+		if(follow not in visited_nodes):	
+			G.add_edge(follow, user_id)
 
 
 def write_file(rand_edge):
@@ -41,15 +40,13 @@ def write_file(rand_edge):
 
 def next_node(G, aux_unif):
 
-	print("\n### next node ###")
+	print("\n# next node")
 	rand = random.choice(aux_unif)
 	edges = G.edges(L_nodes[rand])
 	edges_list = [i[1] for i in edges]
-	print("## edges list")
-	print(len(edges_list))
 
 	rand_edge = random.choice(edges_list)
-	print("selected: "+ str(rand_edge))
+	print("* selected: "+ str(rand_edge))
 	L_nodes[rand] = rand_edge
 	visited_nodes.append(rand_edge)
 
@@ -61,22 +58,20 @@ def next_node(G, aux_unif):
 def generate_auxunif(G):
 	nd = 0
 	aux_unif = []
-	print("generating")
-	print(len(L_nodes))
+	print("\n& generating aux ")
 	for user_id in L_nodes:
-		print(user_id)
-		print(G.out_degree(user_id))
 		if(G.out_degree(user_id) > 0):
 			for i in range(G.degree(user_id)):
 				aux_unif.append(nd)
 		nd = nd + 1
 	return aux_unif	
 
-#def frontier_sampling(G):
 
 def init_graph():
 	G = nx.DiGraph()   
-	l = [1865894354, 1053306459897901056, 95352888, 2531361868, 459711130]
+	init_file = open('escolhidos').read().splitlines()
+	l = [int(i) for i in init_file]
+
 	for n in l:
 		G.add_node(n)
 		L_nodes.append(n)
@@ -84,8 +79,7 @@ def init_graph():
 	create_neighbours(G)
 	aux_unif = generate_auxunif(G)
 
-	i = 0
-	for i in range(99):
+	while True:
 		next_node(G, aux_unif)
 		aux_unif = generate_auxunif(G)
 		if not aux_unif:
