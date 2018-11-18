@@ -165,7 +165,7 @@ def get_following(user_id, api):
 	# return account following by id
 	ids = []
 	sleeptime = 5
-	pages = tweepy.Cursor(api.friends, user_id=user_id, timeout=600).pages()
+	pages = tweepy.Cursor(api.friends_ids, user_id=user_id, timeout=600).pages()
 
 	while True:
 	    try:
@@ -174,7 +174,7 @@ def get_following(user_id, api):
 	        	ids.append(tweet)
 	        time.sleep(sleeptime)
 
-	    except tweepy.TweepError. e: #taking extra care of the "rate limit exceeded"
+	    except tweepy.TweepError as e: #taking extra care of the "rate limit exceeded"
 	        print(e.api_code)
 	        time.sleep(60) 
 	        try:
