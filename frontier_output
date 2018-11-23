@@ -1,25 +1,25 @@
-Rate limit reached. Sleeping for: 234
-Rate limit reached. Sleeping for: 595
+Rate limit reached. Sleeping for: 596
+Rate limit reached. Sleeping for: 596
 Rate limit reached. Sleeping for: 594
 Rate limit reached. Sleeping for: 595
 Rate limit reached. Sleeping for: 595
 Rate limit reached. Sleeping for: 594
+Rate limit reached. Sleeping for: 594
+Rate limit reached. Sleeping for: 595
 Rate limit reached. Sleeping for: 593
-Rate limit reached. Sleeping for: 595
-Rate limit reached. Sleeping for: 594
-Rate limit reached. Sleeping for: 602
+Rate limit reached. Sleeping for: 604
 ## limit handler ##
-user has 2 followers
+user has 1 followers
 ## limit handler ##
-user has 48 following
+user has 49 following
 ## limit handler ##
 user has 373 followers
 ## limit handler ##
 user has 799 following
 ## limit handler ##
-user has 2315 followers
+user has 2318 followers
 ## limit handler ##
-user has 2307 following
+user has 2306 following
 ## limit handler ##
 user has 8 followers
 ## limit handler ##
@@ -35,27 +35,7 @@ node2531361868
 node459711130
 
 ### next node ###
-node46922371
-node1053306459897901056
-node95352888
-node2531361868
-node459711130
-
-### next node ###
-node46922371
-node1053306459897901056
-node636194498
-node2531361868
-node459711130
-
-### next node ###
-node46922371
-node1053306459897901056
-node636194498
-node167018199
-node459711130
-
-### next node ###
+edges list
 Traceback (most recent call last):
   File "/usr/lib/python3.5/random.py", line 253, in choice
     i = self._randbelow(len(seq))
@@ -66,14 +46,14 @@ ValueError: number of bits must be greater than zero
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
-  File "frontier_sampling.py", line 84, in <module>
+  File "frontier_sampling.py", line 89, in <module>
     main()
-  File "frontier_sampling.py", line 79, in main
+  File "frontier_sampling.py", line 84, in main
     G = init_graph()
-  File "frontier_sampling.py", line 69, in init_graph
+  File "frontier_sampling.py", line 74, in init_graph
     next_node(G)
   File "frontier_sampling.py", line 35, in next_node
-    rand_edge = random.choice(edges_list)
+    rand = random.choice(aux_unif)
   File "/usr/lib/python3.5/random.py", line 255, in choice
     raise IndexError('Cannot choose from an empty sequence')
 IndexError: Cannot choose from an empty sequence
