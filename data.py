@@ -18,6 +18,18 @@ def generate_API():
 	
 	return api
 
+def generate_Botometer():	
+	consumer_key = 'tWKbAjFMDKB2vT5pvm5CH3HkB'
+	consumer_secret= 'hf5UIPFJymZ6XtYDqdNq7LVfLEztcsvRrW1ZLwbF8jzMHV0AXG'
+	access_token = '513768992-JfWa1xMpBFKQNWfHlUncCVDCPxDOUVs8shUegVQU'
+	access_token_secret= 'tRQcBExN1vG6otAZnM0L2QHyUupM2qJIz04wcFqkCYoVY'
+
+	auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+	auth.set_access_token(access_token, access_token_secret)
+
+	api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True)
+	
+	return api
 
 def limit_handler(cursor):
 	#deal with timeouts
@@ -140,15 +152,39 @@ def get_bots_by_hashtag(hashtag, api, bom):
 
 def get_tweets(user_id, api):
 	print("test")
+	tweets = [[]]
 	tweet_list = []
-	
+
 	for pages in tweepy.Cursor(api.user_timeline, id=user_id, count=200,timeout=600,lsinclude_rts = False,tweet_mode='extended'
 		).pages():        
 		for tweet in pages:
 			tweet_list.append(tweet)
 	
 	print("len "+str(len(tweet_list)))
-	return tweet_list
+
+	for tweet in tweet_list: 	
+	  if 'retweeted_status' in dir(tweet):
+	    text = tweet.retweeted_status
+	    created_at = tweet.retweeted_status.created_at
+	    replies = tweet.retweeted_status.reply_count
+	    favs = tweet.retweeted_status.favorite_count
+	    retweets = tweet.retweeted_status.retweet_count
+	    is_retweet = 1
+	  else:
+	    text = tweet.created_at
+	    created_at = tweet.created_at 
+	    replies = tweet.reply_count
+	    favs = tweet.favorite_count
+	    retweets = tweet.retweet_count
+	    is_retweet = 0
+
+	  nfkd_form = unicodedata.normalize('NFKD', str(text))
+	  clean_text = nfkd_form.encode('ASCII', 'ignore') 
+
+	  tweet_data = [clean_text, created_at, replies, favs, retweets, is_retweet]
+	  tweets.append(tweet_data)
+
+	return tweets
 
 
 
