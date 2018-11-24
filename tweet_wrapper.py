@@ -7,6 +7,8 @@ import time
 import botometer
 import data
 import unicodedata
+import os.path
+
 
 api = data.generate_API()
 
@@ -17,22 +19,47 @@ def main():
   users = [int(i) for i in init]
   print(len(users))
   wrapped = 0
+  sleeptime = 10
   for user_id in users:
-    user_file = open("files/tweets/tweets_"+str(user_id), "w+")
-    user_score = data.bot_score(user_id, bom)
-    user_obj = api.get_user(user_id)
-    user_file.write("{},{}".format(user_id, user_score))
-    user_file.write("{},{},{}\n".format(user_obj.followers_count, user_obj.friends_count, user_obj.statuses_count))
-    user_file.write("{}\n".format(user_obj.created_at))
+  	if os.path.exists("files/tweets/tweets_"+str(user_id)):
+  		print("! already collected")
+  	else:
+	    user_file = open("files/tweets/tweets_"+str(user_id), "w+")
 
-    tweets = data.get_tweets(user_id, api)
+	    try:
+	    	user_score = data.bot_score(user_id, bom)
+	    except:
+	    	time.sleep(sleeptime*6) 
+	    	user_score = data.bot_score(user_id, bom)	
 
-    for tweet in tweets:
-      user_file.write(','.join(tweet)+"\n")
+	    try:
+		    user_obj = api.get_user(user_id)
+		    time.sleep(sleeptime)
+	    except tweepy.TweepError as e:
+	    	print(e.api_code)
+	    	time.sleep(sleeptime*10) 
+	    	try:    
+		     	print(e.api_code)
+		     	time.sleep(sleeptime*10)			
+		     	user_obj = api.get_user(user_id)
+	    	except tweepy.TweepError as e:
+		        print(e.api_code)
+		        print("failed")
+		        print(user_id)
+		        break
 
-    user_file.close()
-    wrapped = wrapped + 1
-    print("# got user. Count: "+str(wrapped))
+	    user_file.write("{},{}\n".format(user_id, user_score))
+	    user_file.write("{},{},{}\n".format(user_obj.followers_count, user_obj.friends_count, user_obj.statuses_count))
+	    user_file.write("{}\n".format(user_obj.created_at))
+
+	    tweets, datas = data.get_tweets(user_id, api)
+	    for  tweet_data, tweet in zip(datas, tweets):
+	     	user_file.write("{}\n".format(tweet))
+	     	user_file.write(','.join(tweet_data)+"\n")
+
+	    user_file.close()
+	    wrapped = wrapped + 1
+	    print("# got user. Count: "+str(wrapped))
 
 if __name__ == '__main__':
   main()

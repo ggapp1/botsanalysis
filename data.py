@@ -169,9 +169,10 @@ def get_tweets(user_id, api):
 	print("- Getting tweets...")
 	tweets = [[]]
 	tweet_list = []
+	tweet_text = []
 	pages = tweepy.Cursor(api.user_timeline, id=user_id, count=200,timeout=600,lsinclude_rts = False,tweet_mode='extended'
 	).pages()  
-	sleeptime = 1
+	sleeptime = 10
 	while True:
 	    try:
 	        page = next(pages)
@@ -192,7 +193,6 @@ def get_tweets(user_id, api):
 	            print(e.api_code)
 	            print("failed, user probably has protected account")
 	            print(user_id)
-	            return ids
 
 	    except StopIteration:
 	        break
@@ -241,12 +241,13 @@ def get_tweets(user_id, api):
 
 	    is_retweet = 0
 
-	  nfkd_form = unicodedata.normalize('NFKD', str(text))
+	  nfkd_form = unicodedata.normalize('NFKD', text)
 	  clean_text = nfkd_form.encode('ASCII', 'ignore') 
-	  tweet_data = [str(clean_text), str(hashtags),str(url), str(created_at), str(favs), str(retweets), str(is_retweet)]
+	  tweet_data = [ str(hashtags.encode('utf-8')),str(url.encode('utf-8')), str(created_at), str(favs), str(retweets), str(is_retweet)]
 	  tweets.append(tweet_data)
+	  tweet_text.append(str(clean_text))
 	print("+ User has {} tweets.".format(len(tweets)))  
-	return tweets
+	return tweet_text,tweets
 
 
 
