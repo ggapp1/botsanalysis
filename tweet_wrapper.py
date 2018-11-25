@@ -25,13 +25,13 @@ def main():
   		print("! already collected")
   	else:
 	    user_file = open("files/tweets/tweets_"+str(user_id), "w+")
-
+	    print("getting user info")
 	    try:
 	    	user_score = data.bot_score(user_id, bom)
 	    except:
 	    	time.sleep(sleeptime*6) 
 	    	user_score = data.bot_score(user_id, bom)	
-
+	    print("now user info")
 	    try:
 		    user_obj = api.get_user(user_id)
 		    time.sleep(sleeptime)

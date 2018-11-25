@@ -172,7 +172,7 @@ def get_tweets(user_id, api):
 	tweet_text = []
 	pages = tweepy.Cursor(api.user_timeline, id=user_id, count=200,timeout=600,lsinclude_rts = False,tweet_mode='extended'
 	).pages()  
-	sleeptime = 10
+	sleeptime = 5
 	while True:
 	    try:
 	        page = next(pages)
@@ -193,7 +193,7 @@ def get_tweets(user_id, api):
 	            print(e.api_code)
 	            print("failed, user probably has protected account")
 	            print(user_id)
-
+	            break
 	    except StopIteration:
 	        break
 	"""
