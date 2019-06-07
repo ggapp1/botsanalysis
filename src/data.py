@@ -140,7 +140,7 @@ def get_bots_by_hashtag(hashtag, api, bom):
 			bots_file.write("{},{}\n".format(rtuser_id, rtuser_score))
 			i = i + 1 
 			bots_file.flush()
-				s.fsync(bots_file.fileno())
+			s.fsync(bots_file.fileno())
 		else:
 			user_id = tweet.user.id
 			user_score = bot_score(user_id, bom)
