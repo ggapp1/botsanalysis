@@ -1,0 +1,4 @@
+user_id, num_followers, num_following
+[followers]
+[following]
+tweets, timestamp
